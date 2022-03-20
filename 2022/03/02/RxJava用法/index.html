@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.1.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.1.1" type="image/png" sizes="32x32"><meta name="description" content="rxjava是一个异步框架，功能和handler类似，特点是链式调用，逻辑简单。                     内容        观察者模式 rxjava异步使用 操作符介绍 rxjava背压                      观察者模式       java中的观察者模式，主要有三个关键词需要记住，被观察者（Observable），订阅（subscribe），观察者（Obse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava用法(1)">
+<meta property="og:url" content="https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="泉子的理想乡">
+<meta property="og:description" content="rxjava是一个异步框架，功能和handler类似，特点是链式调用，逻辑简单。                     内容        观察者模式 rxjava异步使用 操作符介绍 rxjava背压                      观察者模式       java中的观察者模式，主要有三个关键词需要记住，被观察者（Observable），订阅（subscribe），观察者（Obse">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://izumi.vip/images/blog/rxjava/%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A61.png">
+<meta property="og:image" content="https://izumi.vip/images/blog/rxjava/%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A62.png">
+<meta property="og:image" content="https://izumi.vip/images/blog/rxjava/%E5%8F%98%E6%8D%A2%E6%93%8D%E4%BD%9C%E7%AC%A6.png">
+<meta property="og:image" content="https://izumi.vip/images/blog/rxjava/%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6.png">
+<meta property="og:image" content="https://izumi.vip/images/blog/rxjava/%E5%8A%9F%E8%83%BD%E6%93%8D%E4%BD%9C%E7%AC%A6.png">
+<meta property="article:published_time" content="2022-03-02T06:57:00.000Z">
+<meta property="article:modified_time" content="2022-03-10T16:46:01.342Z">
+<meta property="article:author" content="Acheronsheol">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://izumi.vip/images/blog/rxjava/%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A61.png"><title>RxJava用法(1) | 泉子的理想乡</title><link ref="canonical" href="https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.1.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.1.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-receipt"></i></span><span class="header-nav-menu-item__text">关于</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/friends"><span class="header-nav-menu-item__icon"><i class="fas fa-address-book"></i></span><span class="header-nav-menu-item__text">友链</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">泉子的理想乡</div><div class="header-banner-info__subtitle">西行望 寺宇旁 幽幽芬芳 子在何方</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">RxJava用法(1)</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-02</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-11</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.5k</span></span></div></header><div class="post-body"><p>rxjava是一个异步框架，功能和handler类似，特点是链式调用，逻辑简单。</p>
+
+        <h2 id="内容"   >
+          <a href="#内容" class="heading-link"><i class="fas fa-link"></i></a>内容</h2>
+      <ul>
+<li>观察者模式</li>
+<li>rxjava异步使用</li>
+<li>操作符介绍</li>
+<li>rxjava背压</li>
+</ul>
+
+        <h2 id="观察者模式"   >
+          <a href="#观察者模式" class="heading-link"><i class="fas fa-link"></i></a>观察者模式</h2>
+      <p>java中的观察者模式，主要有三个关键词需要记住，被观察者（Observable），订阅（subscribe），观察者（Observer）。<br>核心思想：被观察者和观察者通过订阅产生一种关系，当被观察者发生一些改变，通知观察者，观察者对应做出相应的回应。<br>举例：小说是被观察者，读者是观察者，小说和读者之前通过subscribe产生订阅关系，小说更新了，通知读者去买新小说。  </p>
+
+        <h2 id="Rx异步使用"   >
+          <a href="#Rx异步使用" class="heading-link"><i class="fas fa-link"></i></a>Rx异步使用</h2>
+      
+        <h3 id="创建被观察者（Observable）"   >
+          <a href="#创建被观察者（Observable）" class="heading-link"><i class="fas fa-link"></i></a>创建被观察者（Observable）</h3>
+      <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;String&gt; story &#x3D; Observable.create(new ObservableOnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void subscribe(ObservableEmitter&lt;String&gt; emitter) throws Exception &#123;</span><br><span class="line">        for (int i&#x3D;1;i&lt;4;i++)&#123;</span><br><span class="line">            Log.d(&quot;TAG&quot;,&quot;我是小说，我更新了第&quot;+i+&quot;季&quot;);</span><br><span class="line">            emitter.onNext(i+&quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        emitter.onComplete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></div></figure>
+<p>调用Observable的create（），传入ObservableOnSubscribe对象，重写ObservableOnSubscribe对象的subscribe（），在subscribe（）中，有一个ObservableEmitter对象，这是一个发射器，调用发射器的onNext()，把被观察者（Observable）的事件发送出去。</p>
+
+        <h3 id="创建观察者（Observer）"   >
+          <a href="#创建观察者（Observer）" class="heading-link"><i class="fas fa-link"></i></a>创建观察者（Observer）</h3>
+      <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Observer&lt;String&gt; reader &#x3D; new Observer&lt;String&gt;() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onSubscribe(Disposable d) &#123;</span><br><span class="line">        Log.d(&quot;TAG&quot;,&quot;我是读者，我和小说订阅了,小说变动后会通知我&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void onNext(String value) &#123;</span><br><span class="line">        Log.d(&quot;TAG&quot;,&quot;我是读者，我拿到了小说的新版本：&quot;+value+&quot;版本&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void onError(Throwable e) &#123;</span><br><span class="line">        Log.d(&quot;TAG&quot;,&quot;我是读者，拿小说的时候出现了问题，后面的不拿了&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void onComplete() &#123;</span><br><span class="line">        Log.d(&quot;TAG&quot;,&quot;我是读者，小说的新版本被我拿完了&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></div></figure>
+<p>创建Observer，直接new一个Observer重写他的四个方法:</p>
+<ul>
+<li>onSubscribe（）：当Observer和Observable订阅的时候调用;</li>
+<li>onNext（）：对Observable中的emitter.onNext（）发射出来的事件进行处理;</li>
+<li>onError（）：不用多说，坏了;</li>
+<li>onComplete（）：Observable发送来的事件全部处理完成，结束调用;</li>
+</ul>
+<p>注意onError（）和onComplete（）是互斥的，只会调用一个</p>
+
+        <h3 id="订阅"   >
+          <a href="#订阅" class="heading-link"><i class="fas fa-link"></i></a>订阅</h3>
+      <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">story.observeOn(AndroidSchedulers.mainThread());</span><br><span class="line">story.subscribeOn(Schedulers.io());</span><br><span class="line">story.subscribe(reader);</span><br></pre></td></tr></table></div></figure>
+<p>异步实现： subscribeOn 切到后台去发送请求并解析数据，最后用 observeOn 切换到主线程更新页面。</p>
+<ul>
+<li>story.subscribeOn(Schedulers.io());发射事件线程是io线程</li>
+<li>story.observeOn(AndroidSchedulers.mainThread());处理事件线程是main</li>
+</ul>
+<p>本来应该是用户订阅小说，但RxJava为了保证流式API调用风格，改为了小说订阅用户，可以理解为小说记录了一个用户，更新时小说通知用户。</p>
+<p>运行结果:</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是读者，我和小说订阅了,小说变动后会通知我</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是小说，我更新了第1季</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是读者，我拿到了小说的新版本：1版本</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是小说，我更新了第2季</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是读者，我拿到了小说的新版本：2版本</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是小说，我更新了第3季</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是读者，我拿到了小说的新版本：3版本</span><br><span class="line">2022-03-02 16:57:22.636 6289-6289&#x2F;vip.izumi.androidframework D&#x2F;TAG: 我是读者，小说的新版本被我拿完了</span><br></pre></td></tr></table></div></figure>
+
+<p>上面的三个步骤可以合起来用链式调用的方法写：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;        Observable.create(new ObservableOnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">&#x2F;&#x2F;            @Override</span><br><span class="line">&#x2F;&#x2F;            public void subscribe(ObservableEmitter&lt;String&gt; emitter) throws Exception &#123;</span><br><span class="line">&#x2F;&#x2F;                for (int i&#x3D;1;i&lt;4;i++)&#123;</span><br><span class="line">&#x2F;&#x2F;                    Log.d(&quot;TAG&quot;,&quot;我是小说，我更新了第&quot;+i+&quot;季&quot;);</span><br><span class="line">&#x2F;&#x2F;                    emitter.onNext(i+&quot;&quot;);</span><br><span class="line">&#x2F;&#x2F;                &#125;</span><br><span class="line">&#x2F;&#x2F;                emitter.onComplete();</span><br><span class="line">&#x2F;&#x2F;            &#125;</span><br><span class="line">&#x2F;&#x2F;        &#125;)</span><br><span class="line">&#x2F;&#x2F;                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">&#x2F;&#x2F;                .subscribeOn(Schedulers.io())</span><br><span class="line">&#x2F;&#x2F;                .subscribe(new Observer&lt;String&gt;() &#123;</span><br><span class="line">&#x2F;&#x2F;                    @Override</span><br><span class="line">&#x2F;&#x2F;                    public void onSubscribe(Disposable d) &#123;</span><br><span class="line">&#x2F;&#x2F;                        Log.d(&quot;TAG&quot;,&quot;我是读者，我和小说订阅了,小说变动后会通知我&quot;);</span><br><span class="line">&#x2F;&#x2F;                    &#125;</span><br><span class="line">&#x2F;&#x2F;                    @Override</span><br><span class="line">&#x2F;&#x2F;                    public void onNext(String value) &#123;</span><br><span class="line">&#x2F;&#x2F;                        Log.d(&quot;TAG&quot;,&quot;我是读者，我拿到了小说的新版本：&quot;+value+&quot;版本&quot;);</span><br><span class="line">&#x2F;&#x2F;                    &#125;</span><br><span class="line">&#x2F;&#x2F;                    @Override</span><br><span class="line">&#x2F;&#x2F;                    public void onError(Throwable e) &#123;</span><br><span class="line">&#x2F;&#x2F;                        Log.d(&quot;TAG&quot;,&quot;我是读者，拿小说的时候出现了问题，后面的不拿了&quot;);</span><br><span class="line">&#x2F;&#x2F;                    &#125;</span><br><span class="line">&#x2F;&#x2F;                    @Override</span><br><span class="line">&#x2F;&#x2F;                    public void onComplete() &#123;</span><br><span class="line">&#x2F;&#x2F;                        Log.d(&quot;TAG&quot;,&quot;我是读者，小说的新版本被我拿完了&quot;);</span><br><span class="line">&#x2F;&#x2F;                    &#125;</span><br><span class="line">&#x2F;&#x2F;                &#125;);</span><br></pre></td></tr></table></div></figure>
+<p>效果和上面一模一样，这种写法逻辑上更加清晰一点。</p>
+
+        <h2 id="rxjava操作符使用"   >
+          <a href="#rxjava操作符使用" class="heading-link"><i class="fas fa-link"></i></a>rxjava操作符使用</h2>
+      <ul>
+<li>创建操作符</li>
+<li>变换操作符</li>
+<li>合并操作符</li>
+<li>功能操作符</li>
+</ul>
+
+        <h3 id="创建操作符"   >
+          <a href="#创建操作符" class="heading-link"><i class="fas fa-link"></i></a>创建操作符</h3>
+      <p><img src="/images/blog/rxjava/%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A61.png" alt="avatar"><br>作用：创建Observable，发送事件  </p>
+<ul>
+<li>just()<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;);</span><br></pre></td></tr></table></div></figure></li>
+<li>fromArray()<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer[] numbers &#x3D; &#123;1,2,3,4&#125;;</span><br><span class="line">Observable.fromArray(numbers);</span><br></pre></td></tr></table></div></figure></li>
+<li>fromIterable()<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; arrayList &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">arrayList.add(&quot;1&quot;);</span><br><span class="line">arrayList.add(&quot;2&quot;);</span><br><span class="line">arrayList.add(&quot;3&quot;);</span><br><span class="line">arrayList.add(&quot;4&quot;);</span><br><span class="line">Observable.fromIterable(arrayList);</span><br></pre></td></tr></table></div></figure></li>
+<li>never():不发送任何事件</li>
+<li>empty():只发送Complete事件，即emitter.complete()</li>
+<li>error():发送一个异常，传入error（）中</li>
+</ul>
+
+        <h4 id="延时创建：定时操作-amp-周期性操作"   >
+          <a href="#延时创建：定时操作-amp-周期性操作" class="heading-link"><i class="fas fa-link"></i></a>延时创建：定时操作&amp;周期性操作</h4>
+      <ul>
+<li>defer()：直到有观察者（Observer ）订阅时，才动态创建被观察者对象（Observable） &amp; 发送事件</li>
+<li>timer(): 延迟指定时间后，发送1个数值0,默认是在新线程中执行<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Observable.timer(2, TimeUnit.SECONDS) </span><br></pre></td></tr></table></div></figure>
+本质 = 延迟指定时间后，调用一次 onNext(0)</li>
+<li>interval()：<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 参数1 &#x3D; 第1次延迟时间；</span><br><span class="line">&#x2F;&#x2F; 参数2 &#x3D; 间隔时间数字；</span><br><span class="line">&#x2F;&#x2F; 参数3 &#x3D; 时间单位；</span><br><span class="line">Observable.interval(3,1,TimeUnit.SECONDS)</span><br></pre></td></tr></table></div></figure>
+<img src="/images/blog/rxjava/%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A62.png" alt="avatar"></li>
+</ul>
+
+        <h3 id="变换操作符"   >
+          <a href="#变换操作符" class="heading-link"><i class="fas fa-link"></i></a>变换操作符</h3>
+      <p><img src="/images/blog/rxjava/%E5%8F%98%E6%8D%A2%E6%93%8D%E4%BD%9C%E7%AC%A6.png" alt="avatar"></p>
+
+        <h3 id="合并操作符"   >
+          <a href="#合并操作符" class="heading-link"><i class="fas fa-link"></i></a>合并操作符</h3>
+      <p><img src="/images/blog/rxjava/%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6.png" alt="avatar"></p>
+
+        <h3 id="功能操作符"   >
+          <a href="#功能操作符" class="heading-link"><i class="fas fa-link"></i></a>功能操作符</h3>
+      <p><img src="/images/blog/rxjava/%E5%8A%9F%E8%83%BD%E6%93%8D%E4%BD%9C%E7%AC%A6.png" alt="avatar"></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://izumi.vip">Acheronsheol</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/">https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2022/03/02/RxJava%E7%94%A8%E6%B3%95-2/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">RxJava用法(2)</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2022/02/28/Glide%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"><span class="paginator-prev__text">Glide用法</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9"><span class="toc-number">1.</span> <span class="toc-text">
+          内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">
+          观察者模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rx%E5%BC%82%E6%AD%A5%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">
+          Rx异步使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A2%AB%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observable%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">
+          创建被观察者（Observable）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">
+          创建观察者（Observer）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E9%98%85"><span class="toc-number">3.3.</span> <span class="toc-text">
+          订阅</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rxjava%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">
+          rxjava操作符使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">4.1.</span> <span class="toc-text">
+          创建操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BB%B6%E6%97%B6%E5%88%9B%E5%BB%BA%EF%BC%9A%E5%AE%9A%E6%97%B6%E6%93%8D%E4%BD%9C-amp-%E5%91%A8%E6%9C%9F%E6%80%A7%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.1.</span> <span class="toc-text">
+          延时创建：定时操作&amp;周期性操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E6%8D%A2%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">4.2.</span> <span class="toc-text">
+          变换操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">4.3.</span> <span class="toc-text">
+          合并操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">4.4.</span> <span class="toc-text">
+          功能操作符</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://im-cdn-2.moeacg.cn/image/2021/04/21/mine_head6d31f63767ac7890.png" alt="avatar"></div></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/Acheronsheol" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">14</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Acheronsheol</span><span class="footer__devider">|</span><span><a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noopener">冀ICP备2022002480号-1</a></span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.1.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.1.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.1.1"></script><script src="/js/stun-boot.js?v=2.1.1"></script><script src="/js/scroll.js?v=2.1.1"></script><script src="/js/header.js?v=2.1.1"></script><script src="/js/sidebar.js?v=2.1.1"></script></body></html>
