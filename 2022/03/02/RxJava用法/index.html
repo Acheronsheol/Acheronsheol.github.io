@@ -142,7 +142,7 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.1.1"></he
         <h3 id="功能操作符"   >
           <a href="#功能操作符" class="heading-link"><i class="fas fa-link"></i></a><a href="#功能操作符" class="headerlink" title="功能操作符"></a>功能操作符</h3>
       <p><img src="/images/blog/rxjava/%E5%8A%9F%E8%83%BD%E6%93%8D%E4%BD%9C%E7%AC%A6.png" alt="avatar"></p>
-</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://izumi.vip">Acheronsheol</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/">https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2022/03/02/RxJava%E7%94%A8%E6%B3%95-2/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">RxJava用法(2)</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2022/02/28/Glide%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"><span class="paginator-prev__text">Glide用法</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="valine-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9"><span class="toc-number">1.</span> <span class="toc-text">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://izumi.vip">Acheronsheol</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/">https://izumi.vip/2022/03/02/RxJava%E7%94%A8%E6%B3%95/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2022/03/02/RxJava%E7%94%A8%E6%B3%95-2/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">RxJava用法(2)</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2022/02/28/Glide%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"><span class="paginator-prev__text">Glide用法</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="waline-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9"><span class="toc-number">1.</span> <span class="toc-text">
           内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">
           观察者模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rx%E5%BC%82%E6%AD%A5%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">
           Rx异步使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A2%AB%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observable%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">
@@ -427,32 +427,29 @@ if (Array.isArray(assistSearchList)) {
       extSearch(name);
     }, false);
   });
-}</script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+}</script><script src="https://unpkg.com/@waline/client/dist/Waline.min.js"></script><script>function loadWaline () {
   var GUEST_INFO = ['nick', 'mail', 'link'];
   var guest_info = 'nick,mail,link';
 
   guest_info = guest_info.split(',').filter(function(item) {
     return GUEST_INFO.indexOf(item) > -1;
   });
-  new Valine({
-    el: '#valine-container',
-    appId: '3Gio1yNVPX7SvE7sMPMKUa9M-gzGzoHsz',
-    appKey: 'grdFNkbbFkcElUTnJ5yrSsvp',
-    notify: true,
-    verify: true,
+
+  new Waline({
+    el: '#waline-container',
+    serverURL: 'https://waline-hexo-obpz7zet4-acheronsheol.vercel.app',
     placeholder: '欢迎评论~',
-    avatar: 'mp',
-    meta: guest_info,
     pageSize: '10' || 10,
-    visitor: true,
-    recordIP: true,
     lang: '' || 'zh-cn',
-    path: window.location.pathname
+    visitor: true,
+    avatar: 'mp',
+    path: window.location.pathname,
+    meta: guest_info
   });
 }
 
 if (false) {
-  loadValine();
+  loadWaline();
 } else {
-  window.addEventListener('DOMContentLoaded', loadValine, false);
+  window.addEventListener('DOMContentLoaded', loadWaline, false);
 }</script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>

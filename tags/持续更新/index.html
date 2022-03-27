@@ -314,32 +314,29 @@ if (Array.isArray(assistSearchList)) {
       extSearch(name);
     }, false);
   });
-}</script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+}</script><script src="https://unpkg.com/@waline/client/dist/Waline.min.js"></script><script>function loadWaline () {
   var GUEST_INFO = ['nick', 'mail', 'link'];
   var guest_info = 'nick,mail,link';
 
   guest_info = guest_info.split(',').filter(function(item) {
     return GUEST_INFO.indexOf(item) > -1;
   });
-  new Valine({
-    el: '#valine-container',
-    appId: '3Gio1yNVPX7SvE7sMPMKUa9M-gzGzoHsz',
-    appKey: 'grdFNkbbFkcElUTnJ5yrSsvp',
-    notify: true,
-    verify: true,
+
+  new Waline({
+    el: '#waline-container',
+    serverURL: 'https://waline-hexo-obpz7zet4-acheronsheol.vercel.app',
     placeholder: '欢迎评论~',
-    avatar: 'mp',
-    meta: guest_info,
     pageSize: '10' || 10,
-    visitor: true,
-    recordIP: true,
     lang: '' || 'zh-cn',
-    path: window.location.pathname
+    visitor: true,
+    avatar: 'mp',
+    path: window.location.pathname,
+    meta: guest_info
   });
 }
 
 if (false) {
-  loadValine();
+  loadWaline();
 } else {
-  window.addEventListener('DOMContentLoaded', loadValine, false);
+  window.addEventListener('DOMContentLoaded', loadWaline, false);
 }</script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script></body></html>
